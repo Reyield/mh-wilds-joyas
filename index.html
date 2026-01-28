@@ -3,78 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buscador de Joyas MH Wilds</title>
+    <title>Códice de Joyas - MH Wilds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
-        .container { max-width: 800px; margin: 0 auto; }
-        
-        #search-box {
-            width: 100%;
-            padding: 15px;
-            font-size: 18px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        /* --- Variables de Color Temáticas --- */
+        :root {
+            --mh-bg-dark: #1a1512;       /* Fondo principal oscuro */
+            --mh-paper: #cbb995;         /* Color pergamino para el texto base */
+            --mh-leather-dark: #2e221b;  /* Fondo de las tarjetas */
+            --mh-gold: #cba75e;          /* Títulos y bordes dorados */
+            --mh-gold-hover: #e3c687;    /* Dorado más brillante al pasar el mouse */
+            --mh-accent-red: #8a2c21;    /* Color para los slots */
+            --mh-border-frame: #4a3c31;  /* Bordes gruesos */
         }
 
+        body {
+            font-family: 'Spectral', serif;
+            background-color: var(--mh-bg-dark);
+            /* Un degradado sutil para dar textura de fondo */
+            background-image: radial-gradient(circle at center, #2a201a 0%, #1a1512 100%);
+            color: var(--mh-paper);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--mh-leather-dark);
+            border: 4px solid var(--mh-border-frame);
+            /* Sombra interna para efecto de profundidad */
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
+            padding: 25px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        /* Decoración de esquina (opcional, solo CSS) */
+        .main-container::before, .main-container::after {
+            content: '';
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 3px solid var(--mh-gold);
+        }
+        .main-container::before { top: 5px; left: 5px; border-right: none; border-bottom: none; }
+        .main-container::after { bottom: 5px; right: 5px; border-left: none; border-top: none; }
+
+
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--mh-gold);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            border-bottom: 2px solid var(--mh-border-frame);
+            padding-bottom: 15px;
+        }
+
+        /* Estilo del buscador */
+        #search-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        #search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            background: #0f0c0a; /* Muy oscuro */
+            border: 2px solid var(--mh-border-frame);
+            color: var(--mh-gold);
+            font-family: 'Spectral', serif;
+            border-radius: 4px;
+            outline: none;
+            box-sizing: border-box; /* Para que el padding no afecte el ancho */
+            transition: border-color 0.3s;
+        }
+
+        #search-box:focus {
+            border-color: var(--mh-gold);
+            box-shadow: 0 0 10px rgba(203, 167, 94, 0.3);
+        }
+
+        #search-box::placeholder {
+            color: rgba(203, 185, 149, 0.5);
+            font-style: italic;
+        }
+
+        /* Estilo de las tarjetas de resultados */
         .card {
-            background: white;
+            background: rgba(46, 34, 27, 0.8); /* Color cuero semitransparente */
+            border: 1px solid var(--mh-border-frame);
+            border-left: 4px solid var(--mh-gold); /* Acento dorado a la izquierda */
             padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            background: rgba(60, 45, 35, 0.9);
+            border-left-color: var(--mh-gold-hover);
         }
         
-        .card-header { font-weight: bold; color: #333; font-size: 1.1em; }
-        .card-sub { color: #666; font-size: 0.9em; margin-top: 5px;}
-        .slot-badge { 
-            background: #e0e0e0; 
-            padding: 5px 10px; 
-            border-radius: 15px; 
-            font-size: 0.8em; 
+        .card-info {
+            flex-grow: 1;
+        }
+
+        .card-header {
+            font-family: 'Cinzel Decorative', cursive;
             font-weight: bold;
+            color: var(--mh-gold);
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        
+        .card-header small {
+            color: #8c7b65;
+            font-family: 'Spectral', serif;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        .card-sub {
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .card-sub strong {
+            color: #a89478;
+        }
+
+        .slot-badge { 
+            background: var(--mh-accent-red);
+            color: var(--mh-paper);
+            padding: 8px 12px;
+            border: 2px solid var(--mh-border-frame);
+            font-family: 'Cinzel Decorative', cursive;
+            font-weight: bold;
+            border-radius: 2px; /* Bordes más rectos, menos "web 2.0" */
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        #results p {
+             text-align: center;
+             font-style: italic;
+             color: #8c7b65;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>💎 Buscador de Decoraciones MH</h1>
-    <input type="text" id="search-box" placeholder="Busca por nombre (Español/Inglés) o habilidad...">
-    <div id="results">Cargando datos...</div>
+<div class="main-container">
+    <h1>📜 Códice de Decoraciones</h1>
+    <div id="search-container">
+        <input type="text" id="search-box" placeholder="🔍 Escribe el nombre de la joya o habilidad...">
+    </div>
+    <div id="results">
+        <p>Consultando los archivos del gremio...</p>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    // 1. PEGA AQUÍ TU ENLACE DE GOOGLE SHEETS (El que termina en .csv)
+    // --- PEGA TU ENLACE CSV AQUÍ ---
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-Ya88p8JushYSrm-tvNCIBjzclNAmKvcuTAeiAcEY2VmJQIsnXBo1hTjCJFQoFaDkvkZTl9_jodih/pub?gid=1329202997&single=true&output=csv'; 
+    // -------------------------------
 
     let allJewels = [];
+    const resultsDiv = document.getElementById('results');
 
-    // Cargar datos al iniciar
     Papa.parse(sheetUrl, {
         download: true,
-        header: true, // Esto usa la fila 1 como nombres de propiedad (Joya (Ingles), Type, etc.)
+        header: true,
         complete: function(results) {
             allJewels = results.data;
+            // Limpiamos los datos de filas vacías si las hubiera
+            allJewels = allJewels.filter(item => item['Joya (Español)'] && item['Joya (Español)'].trim() !== '');
             renderList(allJewels);
+        },
+        error: function(err) {
+            resultsDiv.innerHTML = '<p style="color: #d9534f;">Error al cargar los datos. Verifica el enlace CSV.</p>';
+            console.error("Error de PapaParse:", err);
         }
     });
 
-    // Lógica de búsqueda
     const searchInput = document.getElementById('search-box');
-    const resultsDiv = document.getElementById('results');
 
     searchInput.addEventListener('keyup', (e) => {
         const term = e.target.value.toLowerCase();
         
         const filtered = allJewels.filter(item => {
-            // Verifica que los campos existan antes de buscar para evitar errores
-            // Ajusta los nombres exactos según tu Excel (distingue mayúsculas)
             const nombreEsp = item['Joya (Español)']?.toLowerCase() || '';
             const nombreIng = item['Joya (Ingles)']?.toLowerCase() || '';
             const skill = item['Skill (Ingles)']?.toLowerCase() || '';
@@ -91,26 +219,33 @@
 
     function renderList(data) {
         if(data.length === 0) {
-            resultsDiv.innerHTML = '<p>No se encontraron joyas.</p>';
+            resultsDiv.innerHTML = '<p>No se encontraron registros en el códice.</p>';
             return;
         }
 
-        const html = data.map(item => `
+        const html = data.map(item => {
+            // Lógica simple para acortar el texto del slot si es muy largo
+            let slotText = item['Slot level'] || 'N/A';
+            if (slotText.includes("Slot")) {
+                slotText = slotText.replace("Slot", "Nivel");
+            }
+
+            return `
             <div class="card">
-                <div>
-                    <div class="card-header">${item['Joya (Español)']} <small>(${item['Joya (Ingles)']})</small></div>
+                <div class="card-info">
+                    <div class="card-header">${item['Joya (Español)']} <small>${item['Joya (Ingles)']}</small></div>
                     <div class="card-sub">
-                        <strong>Habilidad:</strong> ${item['Habilidad (Español)']} | 
+                        <strong>Habilidad:</strong> ${item['Habilidad (Español)']} <br>
                         <strong>Tipo:</strong> ${item['Type']}
                     </div>
                 </div>
-                <div class="slot-badge">${item['Slot level'] || 'N/A'}</div>
+                <div class="slot-badge">${slotText}</div>
             </div>
-        `).join('');
+        `}).join('');
 
         resultsDiv.innerHTML = html;
     }
 </script>
 
 </body>
-</html>    
+</html>
