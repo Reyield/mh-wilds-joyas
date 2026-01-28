@@ -7,17 +7,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* --- TEMA MONSTER HUNTER --- */
         :root {
             --bg-dark: #121212;
             --card-bg: #1e1e1e;
             --text-main: #e0e0e0;
-            --gold: #d4af37;        /* Dorado MH */
-            --gold-dim: #8a7326;    /* Dorado oscuro para bordes */
-            --blue-orb: #29b6f6;    /* Azul brillante (Armor) */
-            --gold-orb: #ffd54f;    /* Dorado brillante (Weapon) */
-            --grey-orb: #9e9e9e;    /* Misterioso */
-            --accent-red: #8a2c21;  /* Rojo para slots */
+            --gold: #d4af37;
+            --gold-dim: #8a7326;
+            --blue-orb: #29b6f6;
+            --gold-orb: #ffd54f;
+            --grey-orb: #9e9e9e;
+            --accent-red: #8a2c21;
         }
 
         body {
@@ -32,7 +31,6 @@
 
         .container { max-width: 800px; margin: 0 auto; }
 
-        /* HEADER */
         header {
             display: flex;
             justify-content: space-between;
@@ -49,10 +47,9 @@
             font-size: 1.6em;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
-        /* TOGGLE SWITCH ESTILIZADO */
+        /* TOGGLE */
         .toggle-wrapper {
             display: flex;
             align-items: center;
@@ -60,26 +57,22 @@
             font-family: 'Cinzel', serif;
             font-weight: bold;
         }
-
         .switch {
             position: relative;
             display: inline-block;
             width: 54px;
             height: 28px;
         }
-
         .switch input { opacity: 0; width: 0; height: 0; }
-
         .slider {
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
             background-color: #333;
             transition: .4s;
-            border-radius: 4px; /* Cuadrado con bordes suaves, más "mecánico" */
+            border-radius: 4px;
             border: 2px solid var(--gold-dim);
         }
-
         .slider:before {
             position: absolute;
             content: "";
@@ -91,7 +84,6 @@
             transition: .4s;
             border-radius: 2px;
         }
-
         input:checked + .slider { background-color: #2e260e; }
         input:checked + .slider:before { transform: translateX(26px); }
 
@@ -109,7 +101,6 @@
             font-family: 'Cinzel', serif;
         }
         #search-box:focus { outline: 2px solid var(--gold); border-color: transparent; }
-        #search-box::placeholder { color: #666; font-family: 'Roboto', sans-serif; }
 
         /* TARJETAS */
         .card {
@@ -121,7 +112,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
-
         .card:hover { transform: translateY(-2px); border-left-color: #ffe082; }
 
         .card-header {
@@ -130,7 +120,6 @@
             align-items: center;
             margin-bottom: 8px;
         }
-
         .jewel-name {
             font-family: 'Cinzel', serif;
             font-size: 1.3em;
@@ -149,7 +138,6 @@
             color: #888;
             margin-bottom: 12px;
         }
-        
         .meta-tag {
             background: #2a2a2a;
             padding: 2px 6px;
@@ -165,34 +153,34 @@
             border-left: 2px solid #444;
         }
 
-        /* ORBES */
+        /* ORBES CON IMAGEN */
         .orb-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px; /* Más espacio entre grupos de orbes */
             padding-top: 10px;
             border-top: 1px solid #333;
         }
-
         .orb-badge {
             display: inline-flex;
             align-items: center;
-            font-size: 0.85em;
+            font-size: 0.9em;
             color: #ccc;
+            gap: 8px; /* Espacio entre imagen y texto */
         }
-
-        .orb-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
-            box-shadow: 0 0 5px currentColor;
+        .orb-img {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px; /* Un poco cuadrado, estilo inventario */
+            object-fit: contain;
+            background: rgba(0,0,0,0.5); /* Fondo oscuro por si la imagen es transparente */
+            border: 1px solid #444;
         }
-
-        /* Colores dinámicos */
-        .orb-armor { color: var(--blue-orb); }
-        .orb-weapon { color: var(--gold-orb); }
-        .orb-mystery { color: var(--grey-orb); }
+        
+        /* Colores de texto según tipo (opcional, para mantener la lógica de colores) */
+        .text-armor { color: var(--blue-orb); }
+        .text-weapon { color: var(--gold-orb); }
+        .text-mystery { color: var(--grey-orb); }
 
     </style>
 </head>
@@ -221,12 +209,12 @@
 
 <script>
     // ----------------------------------------------------
-    // ¡PEGA AQUÍ TU ENLACE CSV ACTUALIZADO!
+    // ASEGÚRATE DE QUE ESTE ENLACE ESTÁ ACTUALIZADO
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-Ya88p8JushYSrm-tvNCIBjzclNAmKvcuTAeiAcEY2VmJQIsnXBo1hTjCJFQoFaDkvkZTl9_jodih/pub?gid=1329202997&single=true&output=csv'; 
     // ----------------------------------------------------
 
     let allJewels = [];
-    let isSpanish = false; // Empieza en Inglés
+    let isSpanish = false;
 
     const resultsDiv = document.getElementById('results');
     const searchInput = document.getElementById('search-box');
@@ -238,20 +226,16 @@
         download: true,
         header: true,
         complete: function(results) {
-            // Filtramos filas vacías
             allJewels = results.data.filter(i => i['Joya (Ingles)'] && i['Joya (Ingles)'].trim() !== '');
             renderList(allJewels);
         },
         error: function(err) {
-            resultsDiv.innerHTML = '<p style="color: red; text-align: center;">Error al leer el CSV.</p>';
+            resultsDiv.innerHTML = '<p style="color: red; text-align: center;">Error al leer datos.</p>';
         }
     });
 
-    // Evento del Toggle (Inglés <-> Español)
     toggle.addEventListener('change', (e) => {
         isSpanish = e.target.checked;
-        
-        // Efecto visual en las etiquetas
         if(isSpanish) {
             labelEs.style.color = 'var(--gold)';
             labelEn.style.color = '#666';
@@ -259,87 +243,89 @@
             labelEn.style.color = 'var(--gold)';
             labelEs.style.color = '#666';
         }
-        // Vuelve a buscar con el filtro actual para traducir al instante
         triggerSearch();
     });
 
-    // Evento de Búsqueda
     searchInput.addEventListener('keyup', triggerSearch);
 
     function triggerSearch() {
         const term = searchInput.value.toLowerCase();
-        
         const filtered = allJewels.filter(item => {
             const esName = (item['Joya (Español)'] || '').toLowerCase();
             const enName = (item['Joya (Ingles)'] || '').toLowerCase();
             const esSkill = (item['Habilidad (Español)'] || '').toLowerCase();
             const enSkill = (item['Skill (Ingles)'] || '').toLowerCase();
-
             return esName.includes(term) || enName.includes(term) || 
                    esSkill.includes(term) || enSkill.includes(term);
         });
-
         renderList(filtered);
     }
 
-    // Determina color del orbe
-    function getOrbType(orbName) {
-        if(!orbName) return 'orb-mystery';
+    // Auxiliar para color del texto
+    function getOrbColorClass(orbName) {
+        if(!orbName) return 'text-mystery';
         const lower = orbName.toLowerCase();
-        if(lower.includes('armor')) return 'orb-armor';
-        if(lower.includes('sword') || lower.includes('weapon')) return 'orb-weapon';
-        return 'orb-mystery';
+        if(lower.includes('armor')) return 'text-armor';
+        if(lower.includes('sword') || lower.includes('weapon')) return 'text-weapon';
+        return 'text-mystery';
     }
 
     function renderList(data) {
         if(data.length === 0) {
-            resultsDiv.innerHTML = '<p style="text-align: center; color: #888; font-style: italic;">No se encontraron joyas.</p>';
+            resultsDiv.innerHTML = '<p style="text-align: center; color: #888;">No results.</p>';
             return;
         }
 
         const html = data.map(item => {
-            // 1. Decidir idioma
             const name = isSpanish ? (item['Joya (Español)'] || item['Joya (Ingles)']) : item['Joya (Ingles)'];
             const skill = isSpanish ? (item['Habilidad (Español)'] || item['Skill (Ingles)']) : item['Skill (Ingles)'];
-            
-            // 2. Datos técnicos (Siempre en inglés o neutro, según tu Excel)
             const type = item['Type'] || 'Decoration';
             const slot = item['Slot level'] || 'Slot ?';
-            const link = item['Link'] || '#'; // Aquí usa la columna nueva que creamos
+            const link = item['Link'] || '#';
 
-            // 3. Orbes (Muestra hasta 2)
-            const orb1 = item['Orbe donde se obtiene'];
-            const orb2 = item['Otro orbe donde se obtiene'];
+            // Datos de Orbes (Texto + Imagen)
+            const orbText1 = item['Orbe donde se obtiene'];
+            const orbImg1  = item['ImgOrb1']; // Nueva columna del script
+            
+            const orbText2 = item['Otro orbe donde se obtiene'];
+            const orbImg2  = item['ImgOrb2']; // Nueva columna del script
+
             let orbsHtml = '';
 
-            if(orb1) {
-                const styleClass = getOrbType(orb1);
-                orbsHtml += `<div class="orb-badge ${styleClass}"><div class="orb-dot" style="background: currentColor;"></div>${orb1}</div>`;
-            }
-            if(orb2) {
-                const styleClass = getOrbType(orb2);
-                orbsHtml += `<div class="orb-badge ${styleClass}"><div class="orb-dot" style="background: currentColor;"></div>${orb2}</div>`;
+            // Orbe 1
+            if(orbText1) {
+                const colorClass = getOrbColorClass(orbText1);
+                // Si hay imagen, la usa. Si no, usa un icono por defecto
+                const imgTag = orbImg1 ? `<img src="${orbImg1}" class="orb-img" alt="icon">` : '<span style="font-size:20px">💎</span>';
+                
+                orbsHtml += `<div class="orb-badge ${colorClass}">
+                                ${imgTag} 
+                                <span>${orbText1}</span>
+                             </div>`;
             }
 
-            // HTML de la tarjeta
+            // Orbe 2
+            if(orbText2) {
+                const colorClass = getOrbColorClass(orbText2);
+                const imgTag = orbImg2 ? `<img src="${orbImg2}" class="orb-img" alt="icon">` : '<span style="font-size:20px">💎</span>';
+                
+                orbsHtml += `<div class="orb-badge ${colorClass}">
+                                ${imgTag}
+                                <span>${orbText2}</span>
+                             </div>`;
+            }
+
             return `
             <div class="card">
                 <div class="card-header">
                     <a href="${link}" target="_blank" class="jewel-name">${name} ↗</a>
                 </div>
-                
                 <div class="meta-tags">
                     <span class="meta-tag">${type}</span>
                     <span class="meta-tag" style="color: var(--accent-red); border-color: var(--accent-red);">${slot}</span>
                 </div>
-
-                <div class="skill-text">
-                    ${skill}
-                </div>
-
-                <div class="orb-container">
-                    ${orbsHtml}
-                </div>
+                <div class="skill-text">${skill}</div>
+                <div class="orb-container">${orbsHtml}</div>
             </div>
             `;
         }).join('');
