@@ -3,245 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Códice de Joyas - MH Wilds</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Spectral:wght@400;600&display=swap" rel="stylesheet">
+    <title>Gremio de Cazadores - Archivo de Joyas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Variables de Color Temáticas --- */
+        /* --- TEMA MONSTER HUNTER --- */
         :root {
-            --mh-bg-dark: #1a1512;       /* Fondo principal oscuro */
-            --mh-paper: #cbb995;         /* Color pergamino para el texto base */
-            --mh-leather-dark: #2e221b;  /* Fondo de las tarjetas */
-            --mh-gold: #cba75e;          /* Títulos y bordes dorados */
-            --mh-gold-hover: #e3c687;    /* Dorado más brillante al pasar el mouse */
-            --mh-accent-red: #8a2c21;    /* Color para los slots */
-            --mh-border-frame: #4a3c31;  /* Bordes gruesos */
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --gold: #d4af37;        /* Dorado MH */
+            --gold-dim: #8a7326;    /* Dorado oscuro para bordes */
+            --blue-orb: #29b6f6;    /* Azul brillante (Armor) */
+            --gold-orb: #ffd54f;    /* Dorado brillante (Weapon) */
+            --grey-orb: #9e9e9e;    /* Misterioso */
+            --accent-red: #8a2c21;  /* Rojo para slots */
         }
 
         body {
-            font-family: 'Spectral', serif;
-            background-color: var(--mh-bg-dark);
-            /* Un degradado sutil para dar textura de fondo */
-            background-image: radial-gradient(circle at center, #2a201a 0%, #1a1512 100%);
-            color: var(--mh-paper);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             padding: 20px;
+            margin: 0;
+            background-image: radial-gradient(circle at top, #1f1f1f 0%, #121212 100%);
             min-height: 100vh;
         }
 
-        .main-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--mh-leather-dark);
-            border: 4px solid var(--mh-border-frame);
-            /* Sombra interna para efecto de profundidad */
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.5);
-            padding: 25px;
-            border-radius: 4px;
-            position: relative;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        /* Decoración de esquina (opcional, solo CSS) */
-        .main-container::before, .main-container::after {
-            content: '';
-            position: absolute;
-            width: 20px; height: 20px;
-            border: 3px solid var(--mh-gold);
-        }
-        .main-container::before { top: 5px; left: 5px; border-right: none; border-bottom: none; }
-        .main-container::after { bottom: 5px; right: 5px; border-left: none; border-top: none; }
-
-
-        h1 {
-            font-family: 'Cinzel Decorative', cursive;
-            color: var(--mh-gold);
-            text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 25px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
-            border-bottom: 2px solid var(--mh-border-frame);
-            padding-bottom: 15px;
-        }
-
-        /* Estilo del buscador */
-        #search-container {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        #search-box {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            background: #0f0c0a; /* Muy oscuro */
-            border: 2px solid var(--mh-border-frame);
-            color: var(--mh-gold);
-            font-family: 'Spectral', serif;
-            border-radius: 4px;
-            outline: none;
-            box-sizing: border-box; /* Para que el padding no afecte el ancho */
-            transition: border-color 0.3s;
-        }
-
-        #search-box:focus {
-            border-color: var(--mh-gold);
-            box-shadow: 0 0 10px rgba(203, 167, 94, 0.3);
-        }
-
-        #search-box::placeholder {
-            color: rgba(203, 185, 149, 0.5);
-            font-style: italic;
-        }
-
-        /* Estilo de las tarjetas de resultados */
-        .card {
-            background: rgba(46, 34, 27, 0.8); /* Color cuero semitransparente */
-            border: 1px solid var(--mh-border-frame);
-            border-left: 4px solid var(--mh-gold); /* Acento dorado a la izquierda */
-            padding: 15px;
-            margin-bottom: 12px;
+        /* HEADER */
+        header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s, background 0.2s;
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--gold-dim);
+            padding-bottom: 15px;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            background: rgba(60, 45, 35, 0.9);
-            border-left-color: var(--mh-gold-hover);
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin: 0;
+            font-size: 1.6em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
-        
-        .card-info {
-            flex-grow: 1;
+
+        /* TOGGLE SWITCH ESTILIZADO */
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
         }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 54px;
+            height: 28px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 4px; /* Cuadrado con bordes suaves, más "mecánico" */
+            border: 2px solid var(--gold-dim);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--gold);
+            transition: .4s;
+            border-radius: 2px;
+        }
+
+        input:checked + .slider { background-color: #2e260e; }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* BUSCADOR */
+        #search-box {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--gold-dim);
+            color: var(--gold);
+            border-radius: 4px;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            font-family: 'Cinzel', serif;
+        }
+        #search-box:focus { outline: 2px solid var(--gold); border-color: transparent; }
+        #search-box::placeholder { color: #666; font-family: 'Roboto', sans-serif; }
+
+        /* TARJETAS */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-left: 5px solid var(--gold);
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-2px); border-left-color: #ffe082; }
 
         .card-header {
-            font-family: 'Cinzel Decorative', cursive;
-            font-weight: bold;
-            color: var(--mh-gold);
-            font-size: 1.2em;
-            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
         }
-        
-        .card-header small {
-            color: #8c7b65;
-            font-family: 'Spectral', serif;
+
+        .jewel-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3em;
+            color: var(--gold);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--gold-dim);
+        }
+        .jewel-name:hover { color: #fff; border-bottom: 1px solid #fff; }
+
+        .meta-tags {
+            display: flex;
+            gap: 10px;
             font-size: 0.8em;
-            margin-left: 5px;
-        }
-
-        .card-sub {
-            font-size: 0.95em;
-            line-height: 1.4;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+            margin-bottom: 12px;
         }
         
-        .card-sub strong {
-            color: #a89478;
+        .meta-tag {
+            background: #2a2a2a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid #444;
         }
 
-        .slot-badge { 
-            background: var(--mh-accent-red);
-            color: var(--mh-paper);
-            padding: 8px 12px;
-            border: 2px solid var(--mh-border-frame);
-            font-family: 'Cinzel Decorative', cursive;
-            font-weight: bold;
-            border-radius: 2px; /* Bordes más rectos, menos "web 2.0" */
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            min-width: 60px;
-            text-align: center;
+        .skill-text {
+            font-size: 1.05em;
+            color: #eee;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 2px solid #444;
         }
-        
-        #results p {
-             text-align: center;
-             font-style: italic;
-             color: #8c7b65;
+
+        /* ORBES */
+        .orb-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
         }
+
+        .orb-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85em;
+            color: #ccc;
+        }
+
+        .orb-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            box-shadow: 0 0 5px currentColor;
+        }
+
+        /* Colores dinámicos */
+        .orb-armor { color: var(--blue-orb); }
+        .orb-weapon { color: var(--gold-orb); }
+        .orb-mystery { color: var(--grey-orb); }
+
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <h1>📜 Códice de Decoraciones</h1>
-    <div id="search-container">
-        <input type="text" id="search-box" placeholder="🔍 Escribe el nombre de la joya o habilidad...">
-    </div>
+<div class="container">
+    <header>
+        <h1>💎 MH Wilds DB</h1>
+        <div class="toggle-wrapper">
+            <span id="label-en" style="color: var(--gold);">ENG</span>
+            <label class="switch">
+                <input type="checkbox" id="lang-toggle">
+                <span class="slider"></span>
+            </label>
+            <span id="label-es" style="color: #666;">ESP</span>
+        </div>
+    </header>
+
+    <input type="text" id="search-box" placeholder="Buscar joya o habilidad... / Search jewel...">
     <div id="results">
-        <p>Consultando los archivos del gremio...</p>
+        <p style="text-align: center; color: #666;">Cargando códice...</p>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    // --- PEGA TU ENLACE CSV AQUÍ ---
+    // ----------------------------------------------------
+    // ¡PEGA AQUÍ TU ENLACE CSV ACTUALIZADO!
     const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-Ya88p8JushYSrm-tvNCIBjzclNAmKvcuTAeiAcEY2VmJQIsnXBo1hTjCJFQoFaDkvkZTl9_jodih/pub?gid=1329202997&single=true&output=csv'; 
-    // -------------------------------
+    // ----------------------------------------------------
 
     let allJewels = [];
+    let isSpanish = false; // Empieza en Inglés
+
     const resultsDiv = document.getElementById('results');
+    const searchInput = document.getElementById('search-box');
+    const toggle = document.getElementById('lang-toggle');
+    const labelEn = document.getElementById('label-en');
+    const labelEs = document.getElementById('label-es');
 
     Papa.parse(sheetUrl, {
         download: true,
         header: true,
         complete: function(results) {
-            allJewels = results.data;
-            // Limpiamos los datos de filas vacías si las hubiera
-            allJewels = allJewels.filter(item => item['Joya (Español)'] && item['Joya (Español)'].trim() !== '');
+            // Filtramos filas vacías
+            allJewels = results.data.filter(i => i['Joya (Ingles)'] && i['Joya (Ingles)'].trim() !== '');
             renderList(allJewels);
         },
         error: function(err) {
-            resultsDiv.innerHTML = '<p style="color: #d9534f;">Error al cargar los datos. Verifica el enlace CSV.</p>';
-            console.error("Error de PapaParse:", err);
+            resultsDiv.innerHTML = '<p style="color: red; text-align: center;">Error al leer el CSV.</p>';
         }
     });
 
-    const searchInput = document.getElementById('search-box');
+    // Evento del Toggle (Inglés <-> Español)
+    toggle.addEventListener('change', (e) => {
+        isSpanish = e.target.checked;
+        
+        // Efecto visual en las etiquetas
+        if(isSpanish) {
+            labelEs.style.color = 'var(--gold)';
+            labelEn.style.color = '#666';
+        } else {
+            labelEn.style.color = 'var(--gold)';
+            labelEs.style.color = '#666';
+        }
+        // Vuelve a buscar con el filtro actual para traducir al instante
+        triggerSearch();
+    });
 
-    searchInput.addEventListener('keyup', (e) => {
-        const term = e.target.value.toLowerCase();
+    // Evento de Búsqueda
+    searchInput.addEventListener('keyup', triggerSearch);
+
+    function triggerSearch() {
+        const term = searchInput.value.toLowerCase();
         
         const filtered = allJewels.filter(item => {
-            const nombreEsp = item['Joya (Español)']?.toLowerCase() || '';
-            const nombreIng = item['Joya (Ingles)']?.toLowerCase() || '';
-            const skill = item['Skill (Ingles)']?.toLowerCase() || '';
-            const habilidad = item['Habilidad (Español)']?.toLowerCase() || '';
+            const esName = (item['Joya (Español)'] || '').toLowerCase();
+            const enName = (item['Joya (Ingles)'] || '').toLowerCase();
+            const esSkill = (item['Habilidad (Español)'] || '').toLowerCase();
+            const enSkill = (item['Skill (Ingles)'] || '').toLowerCase();
 
-            return nombreEsp.includes(term) || 
-                   nombreIng.includes(term) || 
-                   skill.includes(term) ||
-                   habilidad.includes(term);
+            return esName.includes(term) || enName.includes(term) || 
+                   esSkill.includes(term) || enSkill.includes(term);
         });
 
         renderList(filtered);
-    });
+    }
+
+    // Determina color del orbe
+    function getOrbType(orbName) {
+        if(!orbName) return 'orb-mystery';
+        const lower = orbName.toLowerCase();
+        if(lower.includes('armor')) return 'orb-armor';
+        if(lower.includes('sword') || lower.includes('weapon')) return 'orb-weapon';
+        return 'orb-mystery';
+    }
 
     function renderList(data) {
         if(data.length === 0) {
-            resultsDiv.innerHTML = '<p>No se encontraron registros en el códice.</p>';
+            resultsDiv.innerHTML = '<p style="text-align: center; color: #888; font-style: italic;">No se encontraron joyas.</p>';
             return;
         }
 
         const html = data.map(item => {
-            // Lógica simple para acortar el texto del slot si es muy largo
-            let slotText = item['Slot level'] || 'N/A';
-            if (slotText.includes("Slot")) {
-                slotText = slotText.replace("Slot", "Nivel");
+            // 1. Decidir idioma
+            const name = isSpanish ? (item['Joya (Español)'] || item['Joya (Ingles)']) : item['Joya (Ingles)'];
+            const skill = isSpanish ? (item['Habilidad (Español)'] || item['Skill (Ingles)']) : item['Skill (Ingles)'];
+            
+            // 2. Datos técnicos (Siempre en inglés o neutro, según tu Excel)
+            const type = item['Type'] || 'Decoration';
+            const slot = item['Slot level'] || 'Slot ?';
+            const link = item['Link'] || '#'; // Aquí usa la columna nueva que creamos
+
+            // 3. Orbes (Muestra hasta 2)
+            const orb1 = item['Orbe donde se obtiene'];
+            const orb2 = item['Otro orbe donde se obtiene'];
+            let orbsHtml = '';
+
+            if(orb1) {
+                const styleClass = getOrbType(orb1);
+                orbsHtml += `<div class="orb-badge ${styleClass}"><div class="orb-dot" style="background: currentColor;"></div>${orb1}</div>`;
+            }
+            if(orb2) {
+                const styleClass = getOrbType(orb2);
+                orbsHtml += `<div class="orb-badge ${styleClass}"><div class="orb-dot" style="background: currentColor;"></div>${orb2}</div>`;
             }
 
+            // HTML de la tarjeta
             return `
             <div class="card">
-                <div class="card-info">
-                    <div class="card-header">${item['Joya (Español)']} <small>${item['Joya (Ingles)']}</small></div>
-                    <div class="card-sub">
-                        <strong>Habilidad:</strong> ${item['Habilidad (Español)']} <br>
-                        <strong>Tipo:</strong> ${item['Type']}
-                    </div>
+                <div class="card-header">
+                    <a href="${link}" target="_blank" class="jewel-name">${name} ↗</a>
                 </div>
-                <div class="slot-badge">${slotText}</div>
+                
+                <div class="meta-tags">
+                    <span class="meta-tag">${type}</span>
+                    <span class="meta-tag" style="color: var(--accent-red); border-color: var(--accent-red);">${slot}</span>
+                </div>
+
+                <div class="skill-text">
+                    ${skill}
+                </div>
+
+                <div class="orb-container">
+                    ${orbsHtml}
+                </div>
             </div>
-        `}).join('');
+            `;
+        }).join('');
 
         resultsDiv.innerHTML = html;
     }
