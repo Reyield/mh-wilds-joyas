@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador de Joyas MH Wilds</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        #search-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header { font-weight: bold; color: #333; font-size: 1.1em; }
+        .card-sub { color: #666; font-size: 0.9em; margin-top: 5px;}
+        .slot-badge { 
+            background: #e0e0e0; 
+            padding: 5px 10px; 
+            border-radius: 15px; 
+            font-size: 0.8em; 
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💎 Buscador de Decoraciones MH</h1>
+    <input type="text" id="search-box" placeholder="Busca por nombre (Español/Inglés) o habilidad...">
+    <div id="results">Cargando datos...</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+<script>
+    // 1. PEGA AQUÍ TU ENLACE DE GOOGLE SHEETS (El que termina en .csv)
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-Ya88p8JushYSrm-tvNCIBjzclNAmKvcuTAeiAcEY2VmJQIsnXBo1hTjCJFQoFaDkvkZTl9_jodih/pub?gid=1329202997&single=true&output=csv'; 
+
+    let allJewels = [];
+
+    // Cargar datos al iniciar
+    Papa.parse(sheetUrl, {
+        download: true,
+        header: true, // Esto usa la fila 1 como nombres de propiedad (Joya (Ingles), Type, etc.)
+        complete: function(results) {
+            allJewels = results.data;
+            renderList(allJewels);
+        }
+    });
+
+    // Lógica de búsqueda
+    const searchInput = document.getElementById('search-box');
+    const resultsDiv = document.getElementById('results');
+
+    searchInput.addEventListener('keyup', (e) => {
+        const term = e.target.value.toLowerCase();
+        
+        const filtered = allJewels.filter(item => {
+            // Verifica que los campos existan antes de buscar para evitar errores
+            // Ajusta los nombres exactos según tu Excel (distingue mayúsculas)
+            const nombreEsp = item['Joya (Español)']?.toLowerCase() || '';
+            const nombreIng = item['Joya (Ingles)']?.toLowerCase() || '';
+            const skill = item['Skill (Ingles)']?.toLowerCase() || '';
+            const habilidad = item['Habilidad (Español)']?.toLowerCase() || '';
+
+            return nombreEsp.includes(term) || 
+                   nombreIng.includes(term) || 
+                   skill.includes(term) ||
+                   habilidad.includes(term);
+        });
+
+        renderList(filtered);
+    });
+
+    function renderList(data) {
+        if(data.length === 0) {
+            resultsDiv.innerHTML = '<p>No se encontraron joyas.</p>';
+            return;
+        }
+
+        const html = data.map(item => `
+            <div class="card">
+                <div>
+                    <div class="card-header">${item['Joya (Español)']} <small>(${item['Joya (Ingles)']})</small></div>
+                    <div class="card-sub">
+                        <strong>Habilidad:</strong> ${item['Habilidad (Español)']} | 
+                        <strong>Tipo:</strong> ${item['Type']}
+                    </div>
+                </div>
+                <div class="slot-badge">${item['Slot level'] || 'N/A'}</div>
+            </div>
+        `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+</script>
+
+</body>
+</html>    
